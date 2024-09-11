@@ -103,9 +103,14 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 
 If you want to add images to the project, please contact me via LinkedIn, Instagram, or email. Click the logos below:
 
-[![LinkedIn](https://cdn-icons-png.flaticon.com/512/174/174857.png)](https://www.linkedin.com/in/lavanya-varadharajan-0a6753237/)  
-[![Instagram](https://cdn-icons-png.flaticon.com/512/2111/2111463.png)](https://www.instagram.com/essence_of_lavanya/)  
-[![Email](https://cdn-icons-png.flaticon.com/512/732/732200.png)](mailto:lavanyavaradharajanmy8@gmail.com)
+<p align="left">
+  <a href="mailto:lavanyavaradharajanmy8@gmail.com" target="blank"><img align="center" src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="email" height="30" width="40" /></a>
+  <a href="https://x.com/Lavz_8" target="blank">
+    <img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/x.svg" alt="Lavz_8" height="30" width="40" /></a>
+  <a href="https://linkedin.com/in/lavanya-varadharajan" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="lavanya-varadharajan" height="30" width="40" /></a>
+  <a href="https://github.com/Lavz-8" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/github.svg" alt="Lavz-8" height="30" width="40" /></a>
+  <a href="https://www.instagram.com/essences_of_lavanya/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="Lavz-8" height="30" width="40" /></a>
+</p>
 
 ## Credits
 
