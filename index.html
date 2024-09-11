@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App with Dynamic Background</title>
+    <link rel="icon" href="D:\Project/weather_casting/img/default_logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            background-image: url('file:///D:/Project/weather_casting/img/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background 0.5s ease; /* Smooth transition for background change */
+        }
+        h2 {
+            text-align: center;
+        }
+        header, footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #008594e7;
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            justify-content: space-between;
+        }
+        footer {
+            justify-content: center;
+        }
+        
+        .weather-container {
+            background-color: #a5ffef;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+            transition: background-color 0.3s ease; /* Smooth transition for background-color change */
+        }
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Border effect using text-shadow */
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .logo, .weather-logo {
+            width: 80px; /* Adjust size as needed */
+            height: 70px; /* Adjust size as needed */
+        }
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Border effect using text-shadow */
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .footer-logo {
+            width: 30px; /* Adjust size as needed */
+            height: auto;
+            margin-left: 10px; /* Adjust spacing */
+        }
+        h1 {
+            color: #008594df;
+            font-weight: bold;
+            padding: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Border effect using text-shadow */
+            margin-bottom: 20px;
+        }
+        select, button {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+        }
+        button {
+            background-color: #008594df;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #004a53df;
+        }
+        #result-container {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            border: 1px solid #ddd; /* Border for result section */
+            padding: 40px;
+            border-radius: 10px;
+            background-image: url('file:///D:/Project/weather_casting/img/result.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative; /* Ensure the pseudo-element covers this container */
+        }
+   
+        #result {
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-size: 24px;
+            
+        }
+        .time-info {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .notification-bell {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            background-color: #008594df;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .notification-bell:hover {
+            background-color: #004a53df;
+        }
+        .notification-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            max-width: 300px;
+        }
+        .notification-container p {
+            margin: 0;
+            padding: 5px 0;
+            font-size: 14px;
+        }
+
+        /* New styles for the sliding container */
+        .advice-container {
+            position: fixed;
+            top: 50%;
+            right: -300px; /* Initially hidden off-screen */
+            width: 250px;
+            background-color: #ffffffcc;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: right 0.6s ease;
+            transform: translateY(-50%);
+        }
+        .advice-container.visible {
+            right: 20px; /* Slide in from the right */
+        }
+        .advice-header {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .advice-content {
+            font-size: 14px;
+        }
+        .toggle-advice {
+            position: absolute;
+            top: 20px;
+            right: 15px; /* Adjust position */
+            background-color: #008594df;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.6s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .toggle-advice:hover {
+            background-color: #004a53df;
+        }
+        body.night-time .weather-container h1 {
+            color: white; /* Change text color to white during night time */
+        }
+        .weather-table {
+            width: 100%;
+            text-align: center;
+        }
+
+        .weather-table td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .weather-item {
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally */
+        }
+
+        .weather-icon {
+            font-size: 1.6em; /* Set the icon size */
+            margin-bottom: 0.5em; /* Space between icon and text */
+            width: 2.5em; /* Set width if using an image */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .weather-text {
+            font-size: 0.8em; /* Adjust font size as needed */
+        }
+
+        .weather-icon-large {
+            width: 60px; /* Set the desired width */
+            height: auto; /* Maintain the aspect ratio */
+            border-radius: 10px; /* Optional: Add rounded corners */
+            border: 2px solid #ddd; /* Optional: Add a border */
+        }
+
+    
+        .weather-info {
+           justify-content: center;
+           align-items: center;
+           background-color: #2c3e50; /* Dark background color */
+           color: #ecf0f1; /* Light text color */
+           padding: 20px;
+           border-radius: 10px;
+           max-width: 600px;
+           margin: auto;
+        }
+
+    </style>
+</head>
+<body id="body">
+    <header>
+        <img src="file:///D:/Project/weather_casting/img/default_logo.png" alt="Your Logo" class="logo"> <!-- Adjust src to your logo path -->
+        <h1 class="header-title">Weather App</h1>
+        <img src="file:///D:/Project/weather_casting/img/weather_logo.png" alt="Weather Logo" class="weather-logo" id="weather-logo">
+    </header>
+    
+    <div class="weather-container" id="weather-container">
+        <h1>Cast in a Click</h1>
+        <div>
+            <select id="country" onchange="loadCities()" style="background-color: #ffffff;">
+                <option value="">Select Country</option>
+                <option value="IN">India</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AU">Australia</option>
+                <option value="CN">China</option>
+                <option value="RU">Russia</option>
+                <option value="EU">Europe</option>
+                <option value="KR">South Korea</option>
+                <option value="KP">North Korea</option>
+                <option value="SG">Singapore</option>
+                <option value="MY">Malaysia</option>
+                <option value="LK">Sri Lanka</option>
+                <option value="PA">Pakistan</option>
+                <!-- Add more countries as needed -->
+            </select>
+        </div>
+        <div>
+            <select id="city" style="display:none; background-color: #ffffff;">
+                <option value="">Select City</option>
+                <!-- Cities will be populated dynamically -->
+            </select>
+        </div>
+        <div>
+            <button onclick="getWeather()" style="display:none;">Get Weather</button>
+        </div>
+        <div id="result-container">
+            <div id="result"></div>
+            <div class="time-info" id="time"></div>
+        </div>
+    </div>
+    <button class="notification-bell" onclick="toggleNotifications()">🔔</button>
+    <div class="notification-container" id="notification-container"></div>
+    <div class="advice-container" id="advice-container">
+        <button class="toggle-advice" onclick="toggleAdvice()">⛅</button>
+        <div class="advice-header">Weather Advice</div>
+        <div class="advice-content" id="advice-content"></div>
+    </div>
+
+    <footer>
+        <p class="footer-title">Created by Lavanya</p><img src="file:///D:/Project/weather_casting/img/lavz.png" alt="Logo" class="footer-logo">
+    </footer>
+
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
+    <script>
+        const cityOptions = {
+            IN: ['Delhi', 'Mumbai', 'Chennai', 'Kolkata', 'Bangalore', 'Hyderabad'],
+            US: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia'],
+            CA: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa', 'Edmonton'],
+            GB: ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Liverpool'],
+            AU: ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide', 'Canberra'],
+            CN: ['Beijing', 'Shanghai', 'Guangzhou', 'Shenzhen', 'Chengdu', 'Wuhan'],
+            RU: ['Moscow', 'Saint Petersburg', 'Novosibirsk', 'Yekaterinburg', 'Kazan', 'Nizhny Novgorod'],
+            EU: ['London', 'Paris', 'Berlin', 'Madrid', 'Rome', 'Amsterdam'],
+            KR: ['Seoul', 'Busan', 'Incheon', 'Daegu', 'Daejeon', 'Gwangju'],
+            KP: ['Pyongyang', 'Hamhung', 'Chongjin', 'Nampo', 'Wonsan', 'Sinuiju'],
+            SG: ['Singapore'],
+            MY: ['Kuala Lumpur', 'George Town', 'Johor Bahru', 'Ipoh', 'Kota Kinabalu', 'Kuching'],
+            LK: ['Colombo', 'Kandy', 'Galle', 'Jaffna', 'Negombo', 'Trincomalee'],
+            PA: ['Karachi', 'Lahore', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan', 'Peshawar']
+            // Add more cities for other countries as needed
+        };
+
+        function loadCities() {
+            const country = document.getElementById('country').value;
+            const citySelect = document.getElementById('city');
+            const weatherButton = document.querySelector('button');
+            citySelect.innerHTML = '<option value="">Select City</option>';
+            if (country) {
+                cityOptions[country].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+                citySelect.style.display = 'block';
+                weatherButton.style.display = 'block';
+            } else {
+                citySelect.style.display = 'none';
+                weatherButton.style.display = 'none';
+            }
+            // Clear previous time info
+            document.getElementById('time').innerHTML = '';
+        }
+
+        async function getWeather() {
+            const city = document.getElementById('city').value;
+            if (!city) return alert('Please select a city');
+
+            const apiKey = '';//Enter your apikey here...I used OpenWeatherMap to generate the api key
+            const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            try {
+                const weatherResponse = await fetch(weatherUrl);
+                const weatherData = await weatherResponse.json();
+                
+                if (weatherData.cod === 200) {
+                    const { name, sys, main, weather, wind, timezone, dt } = weatherData;
+                    
+                    // Create the table
+                    const table = `
+                    <table>
+                        <tr>
+                           <td>
+                                <div class="weather-item">
+                                <i class="fas fa-thermometer-half weather-icon"></i>
+                                <span class="weather-text">${main.temp} &deg;C</span>
+                                </div>
+                           </td>
+                           <td>
+                                <div class="weather-item">
+                                <img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" class="weather-icon-large" alt="Weather Icon">
+                                <span class="weather-text">${weather[0].description}</span>
+                                </div>
+                           </td>
+                           <td>
+                                <div class="weather-item">
+                                <i class="fas fa-tint weather-icon"></i>
+                                <span class="weather-text">${main.humidity}%</span>
+                                </div>
+                           </td>
+                           <td>
+                                <div class="weather-item">
+                                <i class="fas fa-wind weather-icon"></i>
+                                <span class="weather-text">${wind.speed} m/s</span>
+                                </div>
+                           </td>
+                        </tr>
+                    </table>
+                `;
+                //
+            
+                document.getElementById('result').innerHTML = `
+                    <h2>${name}, ${sys.country}</h2>
+                    ${table}
+                `;
+
+                // Show local time
+                const localTime = moment().utcOffset(timezone / 60).format('MMMM Do YYYY, h:mm:ss a');
+                document.getElementById('time').innerHTML = `<p>Local Time: ${localTime}</p>`;
+                // Display the result container
+                document.getElementById('result-container').style.display = 'block';
+                // Update background color based on weather condition
+                updateBackground(weather[0].main);
+                // Update container background color based on weather condition
+                updateBackgroundColor(weather[0].main);
+                // Update logo based on weather condition and time of day
+                updateLogo(weather[0].main, localTime);
+                // Update advice based on weather condition
+                updateAdvice(weather[0].main);
+            } else {
+                document.getElementById('result').innerHTML = `<p>${weatherData.message || timezoneData.message}. Please try again.</p>`;
+            }
+        } catch (error) {
+            document.getElementById('result').innerHTML = `<p>Error: ${error.message}. Please try again.</p>`;
+        }}
+
+        function autoHideAdvice() {
+            const adviceContainer = document.getElementById('advice-container');
+            setTimeout(() => {
+                adviceContainer.classList.remove('visible');
+            }, 10000); // 20 seconds delay in milliseconds
+        }
+
+        // Function to check if it's nighttime
+        function isNightTime() {
+            const hours = new Date().getHours();
+            return hours < 6 || hours >= 18; // Night time assumed from 6 PM to 6 AM
+        }
+
+        // Function to update advice based on weather condition
+        function updateAdvice(weatherCondition) {
+            const adviceContainer = document.getElementById('advice-container');
+            const adviceContent = document.getElementById('advice-content');
+
+            let advice = '';
+            const nightTime = isNightTime();
+
+            switch (weatherCondition) {
+                case 'Clear':
+                    advice = nightTime ? 'Have a great night!' : 'It\'s sunny! Wear sunscreen, cooling glasses, and drink plenty of water.';
+                    break;
+                case 'Clouds':
+                    advice = 'It\'s cloudy. Enjoy the cool weather!';
+                    break;
+                case 'Rain':
+                case 'Drizzle':
+                    advice = 'It\'s raining. Take an umbrella, wear a raincoat, and eat hot food.';
+                    break;
+                case 'Haze':
+                case 'Smoke':
+                    advice = 'It\'s not a good Weather. Wear a mask, and stay safe!';
+                    break;
+                case 'Thunderstorm':
+                    advice = 'There\'s a thunderstorm. Stay indoors and stay safe!';
+                    break;
+                case 'Snow':
+                    advice = 'It\'s snowing. Wear warm clothes and stay warm!';
+                    break;
+                default:
+                    advice = 'Have a great day...!';
+                    break;
+            }
+
+            adviceContent.textContent = advice;
+            adviceContainer.classList.add('visible'); // Show the advice container
+
+            // Start timer to hide advice after 20 seconds
+            autoHideAdvice();
+        }
+
+        
+
+        // Function to toggle the advice container
+        function toggleAdvice() {
+            const adviceContainer = document.getElementById('advice-container');
+            adviceContainer.classList.toggle('visible');
+        }
+
+        function updateBackground(weatherCondition) {
+            const body = document.getElementById('body');
+            const logo = document.getElementById('weather-logo');
+            const hours = new Date().getHours();
+            const isDayTime = hours >= 6 && hours < 18; // Assume day time from 6 AM to 6 PM
+
+            switch (weatherCondition) {
+                case 'Clear':
+                    body.style.backgroundImage = isNightTime ? "url('file:///D:/Project/weather_casting/img/night_clear.jpg')" : "url('file:///D:/Project/weather_casting/img/clear.jpg')";
+                    break;
+                case 'Clouds':
+                    body.style.backgroundImage = isNightTime ? "url('file:///D:/Project/weather_casting/img/cloud.jpg')" : "url('file:///D:/Project/weather_casting/img/cloud.jpg')";
+                    break;
+                case 'Mist':
+                    body.style.backgroundImage = isNightTime ? "url('file:///D:/Project/weather_casting/img/night_mist.jpg')" : "url('file:///D:/Project/weather_casting/img/mist.jpg')";
+                    break;
+                case 'Rain':
+                case 'Drizzle':
+                    body.style.backgroundImage = isNightTime ? "url('file:///D:/Project/weather_casting/img/night_rain.jpg')" : "url('file:///D:/Project/weather_casting/img/rain.jpg')";
+                    break;
+                case 'Haze':
+                case 'Smoke':
+                    body.style.backgroundImage = isNightTime ? "url('file:///D:/Project/weather_casting/img/haze.jpg')" : "url('file:///D:/Project/weather_casting/img/haze.jpg')";
+                    break;
+                case 'Thunderstorm':
+                    body.style.backgroundImage = isNightTime ? "url('file:///D:/Project/weather_casting/img/night_thunderstorm.jpg')" : "url('file:///D:/Project/weather_casting/img/thunderstorm.jpg')";
+                    break;
+                case 'Snow':
+                    body.style.backgroundImage = isNightTime ? "url('file:///D:/Project/weather_casting/img/now.jpg')" : "url('file:///D:/Project/weather_casting/img/snow.jpg')";
+                    break;
+                default:
+                    body.style.backgroundImage = "url('file:///D:/Project/weather_casting/img/default.jpg')";
+                    break;
+            }
+            // Toggle night class on body
+            if (isNightTime) {
+                body.classList.add('night-time');
+            } else {
+                body.classList.remove('night-time');
+            }
+        }
+
+        function updateBackgroundColor(weatherCondition) {
+            const container = document.getElementById('weather-container');
+            switch (weatherCondition) {
+                case 'Clear':
+                    container.style.backgroundColor = '#80808077'; // Light blue for clear sky
+                    break;
+                case 'Clouds':
+                    container.style.backgroundColor = '#80808077'; // Dark grey for cloudy weather
+                    break;
+                case 'Rain':
+                case 'Drizzle':
+                case 'Mist':
+                case 'Haze':
+                    container.style.backgroundColor = '#80808077'; // Dark blue for rain
+                    break;
+                case 'Thunderstorm':
+                    container.style.backgroundColor = '#80808077'; // Midnight blue for thunderstorm
+                    break;
+                case 'Snow':
+                    container.style.backgroundColor = '#80808077'; // White for snow
+                    break;
+                default:
+                    container.style.backgroundColor = '#80808077'; // Default background color
+                    break;
+            }
+        }
+
+        function updateLogo(weatherCondition, localTime) {
+            const logo = document.getElementById('weather-logo');
+            if (!logo) return;
+
+            const hours = new Date('1970-01-01T' + localTime + 'Z').getHours();
+            const isDayTime = hours >= 6 && hours < 18; // Assume day time from 6 AM to 6 PM
+
+            switch (weatherCondition) {
+                case 'Clear':
+                    logo.src = isDayTime ? 'file:///D:/Project/weather_casting/img/sun_logo.png' : 'file:///D:/Project/weather_casting/img/moon_logo.png';
+                    logo.alt = isDayTime ? 'Sun Logo' : 'Moon Logo';
+                    break;
+                case 'Clouds':
+                case 'Mist':
+                    logo.src = 'file:///D:/Project/weather_casting/img/cloud_logo.png';
+                    logo.alt = 'Cloud Logo';
+                    break;
+                case 'Haze':
+                    logo.src = 'file:///D:/Project/weather_casting/img/haze_logo.png';
+                    logo.alt = 'Haze Logo';
+                    break;
+                case 'Smoke':
+                    logo.src = 'file:///D:/Project/weather_casting/img/wind_logo.png';
+                    logo.alt = 'Wind Logo';
+                    break;
+                case 'Rain':
+                case 'Drizzle':
+                    logo.src = 'file:///D:/Project/weather_casting/img/rain_logo.png';
+                    logo.alt = 'Rain Logo';
+                    break;
+                case 'Thunderstorm':
+                    logo.src = 'file:///D:/Project/weather_casting/img/thunderstorm_logo.png';
+                    logo.alt = 'Thunderstorm Logo';
+                    break;
+                case 'Snow':
+                    logo.src = 'file:///D:/Project/weather_casting/img/snow_logo.png';
+                    logo.alt = 'Snow Logo';
+                    break;
+                default:
+                    logo.src = 'file:///D:/Project/weather_casting/img/default_logo.png';
+                    logo.alt = 'Default Logo';
+                    break;
+            }
+        }
+
+         // Function to toggle notification container visibility
+         function toggleNotifications() {
+            const notificationContainer = document.getElementById('notification-container');
+            if (notificationContainer.style.display === 'block') {
+                notificationContainer.style.display = 'none';
+            } else {
+                fetchNotifications();
+                notificationContainer.style.display = 'block';
+            }
+        }
+
+        // Function to fetch and display notifications
+        async function fetchNotifications() {
+            const apiUrl = 'https://api.reliefweb.int/v1/reports?appname=apidoc&query[value]=disaster&filter[field]=status&filter[value]=current'; // ReliefWeb API endpoint for current disasters
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                const notificationContainer = document.getElementById('notification-container');
+                notificationContainer.innerHTML = ''; // Clear previous notifications
+
+                if (data.data && data.data.length > 0) {
+                    data.data.forEach(event => {
+                        const eventElement = document.createElement('p');
+                        eventElement.textContent = `${event.fields.title}: ${event.fields.description}`;
+                        notificationContainer.appendChild(eventElement);
+                    });
+                } else {
+                    notificationContainer.innerHTML = '<p>No recent disasters or accidents reported.</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+                const notificationContainer = document.getElementById('notification-container');
+                notificationContainer.innerHTML = `<p>Error fetching notifications: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
